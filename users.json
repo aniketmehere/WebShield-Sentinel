@@ -1,0 +1,15 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "aniket",
+      "password": "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918",
+      "email": "aniketmehere7499@gmail.com",
+      "role": "admin",
+      "api_key": "4fc09649f2739c771ae17a046260b3aadc6be11f2da46ed9f75bec3cdf8314d0",
+      "created_at": "2025-11-22T20:33:56.177678",
+      "last_login": "2025-11-22T20:34:23.465021"
+    }
+  ],
+  "scans": []
+}

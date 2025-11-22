@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Scan - Vulnerability Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔍 VulnScan</h2>
+                <p>Security Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item">📊 Dashboard</a>
+                <a href="/scan" class="nav-item active">🚀 New Scan</a>
+                <a href="/results" class="nav-item">📋 Results</a>
+                <a href="/logout" class="nav-item">🚪 Logout</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <header class="dashboard-header">
+                <h1>🚀 Start New Scan</h1>
+            </header>
+
+            <div class="scan-form">
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="target_url">Target URL:</label>
+                        <input type="url" id="target_url" name="target_url" 
+                               placeholder="https://example.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="scan_type">Scan Type:</label>
+                        <select id="scan_type" name="scan_type">
+                            <option value="full">Full Scan (XSS, SQLi, CSRF)</option>
+                            <option value="xss">XSS Only</option>
+                            <option value="sqli">SQL Injection Only</option>
+                            <option value="csrf">CSRF Only</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Start Scanning</button>
+                </form>
+
+                <div class="scan-info">
+                    <h3>⚠️ Important Notes:</h3>
+                    <ul>
+                        <li>Only scan websites you own or have permission to test</li>
+                        <li>Scans may take several minutes depending on site size</li>
+                        <li>Some vulnerabilities may require manual verification</li>
+                        <li>Keep the browser open during scanning</li>
+                        <li>For testing, you can use: http://testphp.vulnweb.com</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

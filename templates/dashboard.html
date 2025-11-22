@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Vulnerability Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔍 VulnScan</h2>
+                <p>Security Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item active">📊 Dashboard</a>
+                <a href="/scan" class="nav-item">🚀 New Scan</a>
+                <a href="/results" class="nav-item">📋 Results</a>
+                {% if role == 'admin' %}
+                <a href="/admin" class="nav-item">👑 Admin</a>
+                {% endif %}
+                <a href="/logout" class="nav-item">🚪 Logout</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <header class="dashboard-header">
+                <h1>Welcome, {{ username }}! 👋</h1>
+                <div class="user-info">
+                    <span class="role-badge">{{ role }}</span>
+                </div>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🔍</div>
+                    <div class="stat-info">
+                        <h3>Total Scans</h3>
+                        <p class="stat-number">{{ scan_history|length }}</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-info">
+                        <h3>Vulnerabilities Found</h3>
+                        <p class="stat-number">
+                            {{ scan_history|sum(attribute='vulnerabilities_found') }}
+                        </p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛡️</div>
+                    <div class="stat-info">
+                        <h3>Protected Sites</h3>
+                        <p class="stat-number">{{ scan_history|length }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-grid">
+                <a href="/scan" class="action-card">
+                    <div class="action-icon">🚀</div>
+                    <h3>New Scan</h3>
+                    <p>Start a new security scan</p>
+                </a>
+                <a href="/results" class="action-card">
+                    <div class="action-icon">📋</div>
+                    <h3>View Results</h3>
+                    <p>Check previous scan results</p>
+                </a>
+            </div>
+
+            <div class="recent-scans">
+                <h2>Recent Scans</h2>
+                {% if scan_history %}
+                <div class="scans-list">
+                    {% for scan in scan_history %}
+                    <div class="scan-item">
+                        <div class="scan-info">
+                            <h4>{{ scan.target_url }}</h4>
+                            <p>{{ scan.timestamp[:16] }}</p>
+                        </div>
+                        <div class="scan-result">
+                            <span class="vuln-badge">{{ scan.vulnerabilities_found }} vulnerabilities</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="no-data">No scans yet. <a href="/scan">Start your first scan!</a></p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

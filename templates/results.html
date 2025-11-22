@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - Vulnerability Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>🔍 VulnScan</h2>
+                <p>Security Dashboard</p>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="/dashboard" class="nav-item">📊 Dashboard</a>
+                <a href="/scan" class="nav-item">🚀 New Scan</a>
+                <a href="/results" class="nav-item active">📋 Results</a>
+                <a href="/logout" class="nav-item">🚪 Logout</a>
+            </nav>
+        </div>
+
+        <div class="main-content">
+            <header class="dashboard-header">
+                <h1>📊 Scan Results</h1>
+                <a href="/scan" class="btn btn-primary">New Scan</a>
+            </header>
+
+            {% if scan_data %}
+            <div class="scan-summary">
+                <h2>Scan Summary</h2>
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <h3>Target</h3>
+                        <p>{{ scan_data.target_url }}</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Scan Time</h3>
+                        <p>{{ scan_data.timestamp[:16] }}</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Vulnerabilities Found</h3>
+                        <p>{{ scan_data.vulnerabilities_found }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <h2>Vulnerability Details</h2>
+                <div class="vulnerabilities">
+                    {% for vuln in scan_data.results %}
+                    <div class="vulnerability-card severity-{{ vuln.severity.lower() }}">
+                        <div class="vuln-header">
+                            <h3>{{ vuln.type }}</h3>
+                            <span class="severity-badge">{{ vuln.severity }}</span>
+                        </div>
+                        <div class="vuln-details">
+                            <p><strong>Description:</strong> {{ vuln.description }}</p>
+                            <p><strong>URL:</strong> {{ vuln.url }}</p>
+                            {% if vuln.evidence %}
+                            <p><strong>Evidence:</strong> <code>{{ vuln.evidence }}</code></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% else %}
+            <div class="no-results">
+                <h2>No Scan Results Available</h2>
+                <p>You haven't run any scans yet. <a href="/scan">Start your first scan!</a></p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

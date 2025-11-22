@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Vulnerability Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 Web Vulnerability Scanner</h1>
+            <p>Comprehensive security scanning for web applications</p>
+        </header>
+
+        <div class="hero">
+            <h2>Protect Your Web Applications</h2>
+            <p>Scan for common vulnerabilities like XSS, SQL Injection, CSRF, and more</p>
+            <a href="/dashboard" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <h3>🛡️ XSS Detection</h3>
+                <p>Detect Cross-Site Scripting vulnerabilities in forms and URL parameters</p>
+            </div>
+            <div class="feature-card">
+                <h3>🗄️ SQL Injection</h3>
+                <p>Identify SQL injection points with comprehensive payload testing</p>
+            </div>
+            <div class="feature-card">
+                <h3>🔐 CSRF Protection</h3>
+                <p>Check for missing CSRF tokens and protection mechanisms</p>
+            </div>
+            <div class="feature-card">
+                <h3>📊 Security Headers</h3>
+                <p>Analyze HTTP security headers for best practices</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

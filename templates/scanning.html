@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanning - Vulnerability Scanner</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="scanning-container">
+        <div class="scanning-header">
+            <h1>🔍 Security Scan in Progress</h1>
+            <p>Scanning: <strong>{{ target_url }}</strong></p>
+        </div>
+
+        <div class="scan-animation">
+            <div class="radar">
+                <div class="radar-sweep"></div>
+            </div>
+            <div class="loading-text" id="current-task">Initializing scanner...</div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-header">
+                <h3>Scan Progress</h3>
+                <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+
+        <div class="scan-details">
+            <div class="detail-card">
+                <h4>🔄 Current Task</h4>
+                <p id="current-task-text">Initializing...</p>
+            </div>
+            <div class="detail-card">
+                <h4>🎯 Target URL</h4>
+                <p id="current-url">{{ target_url }}</p>
+            </div>
+            <div class="detail-card">
+                <h4>⚠️ Vulnerabilities Found</h4>
+                <p id="vuln-count">0</p>
+            </div>
+        </div>
+
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <h4>📋 Real-time Scan Log</h4>
+            </div>
+            <div class="terminal" id="scan-terminal">
+                <div class="terminal-line">🚀 Starting security scan...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function startScan() {
+            fetch('/start_scan', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'scan_started') {
+                    updateScanProgress();
+                }
+            });
+        }
+
+        function updateScanProgress() {
+            const progressInterval = setInterval(() => {
+                fetch('/scan_status')
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update progress bar
+                        const progressFill = document.getElementById('progress-fill');
+                        const progressText = document.getElementById('progress-text');
+                        
+                        progressFill.style.width = data.progress + '%';
+                        progressText.textContent = data.progress + '%';
+
+                        // Update current task
+                        const currentTask = document.getElementById('current-task');
+                        const currentTaskText = document.getElementById('current-task-text');
+                        if (currentTask) currentTask.textContent = data.current_task;
+                        if (currentTaskText) currentTaskText.textContent = data.current_task;
+
+                        // Update vulnerability count
+                        const vulnCount = document.getElementById('vuln-count');
+                        if (vulnCount) {
+                            vulnCount.textContent = data.vulnerabilities_found;
+                        }
+
+                        // Update terminal
+                        const terminal = document.getElementById('scan-terminal');
+                        if (terminal && data.log_messages) {
+                            data.log_messages.forEach(message => {
+                                if (!terminal.innerHTML.includes(message)) {
+                                    const newLine = document.createElement('div');
+                                    newLine.className = 'terminal-line';
+                                    newLine.textContent = message;
+                                    terminal.appendChild(newLine);
+                                    terminal.scrollTop = terminal.scrollHeight;
+                                }
+                            });
+                        }
+
+                        // Redirect when scan completes
+                        if (!data.active && data.progress === 100) {
+                            clearInterval(progressInterval);
+                            setTimeout(() => {
+                                window.location.href = '/results';
+                            }, 2000);
+                        }
+                    });
+            }, 1000);
+        }
+
+        // Start the scan when page loads
+        setTimeout(() => {
+            startScan();
+        }, 1000);
+    </script>
+</body>
+</html>
